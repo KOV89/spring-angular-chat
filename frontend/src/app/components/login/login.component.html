@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">Авторизация</mat-toolbar>
+<form [formGroup]="loginForm">
+  <mat-form-field>
+    <input matInput placeholder="Имя пользователя" formControlName="username" />
+    <mat-error *ngIf="loginForm?.controls?.['username']?.errors?.['required']"> Имя пользователя обязательно для заполнения </mat-error>
+    <mat-error *ngIf="loginForm?.controls?.['username']?.errors?.['pattern']">
+      Имя пользователя должно содержать только буквы и цифры (от 4 до 16)
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Пароль" formControlName="password" />
+    <mat-error *ngIf="loginForm?.controls?.['password']?.errors?.['required']"> Пароль обязателен для заполнения </mat-error>
+    <mat-error *ngIf="loginForm?.controls?.['password']?.errors?.['pattern']">
+      Пароль должно содержать только буквы и цифры (от 4 до 16)
+    </mat-error>
+  </mat-form-field>
+  <div class="login-buttons">
+    <button [disabled]="loginForm.invalid" (click)="login()" mat-raised-button color="primary">Войти</button>
+    <button [disabled]="loginForm.invalid" (click)="registration()" mat-stroked-button color="primary">Зарегистрироватся</button>
+  </div>
+</form>

@@ -1,0 +1,34 @@
+<div class="chat-wrapper">
+  <div class="content">
+    <ng-scrollbar (updated)="onScrollUpdated()">
+      <div *ngFor="let message of messages.values()" class="mat-card-wrapper" [class.card-right]="message.user.id === user.id">
+        <mat-card>
+          <mat-card-title>
+            {{ message.user.username }}
+            <span>{{ message.time | date: "d.MM.yyy HH:mm" }}</span>
+          </mat-card-title>
+          <mat-card-content>{{ message.text }}</mat-card-content>
+        </mat-card>
+      </div>
+    </ng-scrollbar>
+  </div>
+  <div class="input">
+    <form [formGroup]="messageForm">
+      <mat-form-field>
+        <input matInput autofocus="true" placeholder="Введите сообщение" formControlName="message" />
+        <mat-error *ngIf="messageForm?.controls?.['message']?.errors?.['pattern']">
+          Поле не должно содержать больше 256 символов
+        </mat-error>
+        <button
+          [disabled]="messageForm.invalid || !messageForm.value['message']"
+          (click)="sendMessage()"
+          matSuffix
+          mat-icon-button
+          aria-label="Отправить"
+        >
+          <mat-icon>send</mat-icon>
+        </button>
+      </mat-form-field>
+    </form>
+  </div>
+</div>

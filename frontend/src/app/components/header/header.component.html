@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <span routerLink="/" style="cursor: pointer">Чат</span>
+
+  <ng-container *ngIf="user$ | async as user; else authButton">
+    <button mat-button [matMenuTriggerFor]="userMenu">{{ user?.username }}</button>
+    <mat-menu #userMenu>
+      <button mat-menu-item>Личный кабинет</button>
+      <button *ngIf="authService.isUserAdmin()" mat-menu-item routerLink="/admin">Администрирование</button>
+      <button (click)="authService.logout()" mat-menu-item>Выйти</button>
+    </mat-menu>
+  </ng-container>
+
+  <ng-template #authButton>
+    <button mat-icon-button routerLink="/login">
+      <mat-icon title="Войти">login</mat-icon>
+    </button>
+  </ng-template>
+</mat-toolbar>

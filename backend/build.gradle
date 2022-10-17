@@ -1,0 +1,70 @@
+plugins {
+    id "idea"
+    id 'java'
+    id 'org.springframework.boot' version '2.7.3'
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+project.ext {
+    springBootVersion = '2.7.3'
+    postgresqlVersion = '42.4.2'
+    liquibaseCoreVersion = '4.14.0'
+    jwtVersion = '0.11.5'
+    lombokVersion = '1.18.24'
+}
+
+dependencies {
+    //db
+    implementation group: 'org.postgresql', name: 'postgresql', version: postgresqlVersion
+    implementation group: 'org.liquibase', name: 'liquibase-core', version: liquibaseCoreVersion
+
+    // spring
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: springBootVersion
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+
+    // JWT Auth
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: jwtVersion
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: jwtVersion
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: jwtVersion
+
+    // lombok
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+    testImplementation group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+
+    // mapper
+    implementation group: 'ma.glasnost.orika', name: 'orika-core', version: '1.5.4'
+
+    // annotations
+    compileOnly 'org.jetbrains:annotations:23.0.0'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+jar.enabled=false
+bootJar {
+    archiveName="chat.jar"
+    dependsOn ':frontend:npm_run_build'
+    into('BOOT-INF/classes/static') {
+        from project(':frontend').file('dist/frontend')
+    }
+}
+task copyJar(type: Copy) {
+    from bootJar
+    into '../build'
+}
+build.finalizedBy copyJar

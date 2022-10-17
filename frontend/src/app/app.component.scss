@@ -1,0 +1,11 @@
+:host-context {
+  width: 100vw;
+
+  main {
+    height: calc(100vh - 100px); // 100px header+footer
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+}

@@ -1,0 +1,10 @@
+group 'ru.klimov'
+version '1.0'
+
+wrapper {
+    gradleVersion = '7.4'
+}
+
+task clean(type: Delete){
+    delete 'build'
+}
